@@ -203,6 +203,15 @@ static bool mcp_server_command(int argc, char* argv[]) {
 // Plugin exports
 // ============================================================================
 
+// Explicit DLL entry point. Without this the 32-bit build (clang-cl) does not
+// emit a resolvable _DllMain@12 symbol, and newer x64dbg snapshots refuse to
+// load x64dbg_mcp.dp32 with "entry point _DllMain@12 could not be located"
+// (GitHub issue #1). Defining DllMain ourselves guarantees a valid entry point
+// for both x32 and x64 and is the minimum every x64dbg plugin must provide.
+BOOL WINAPI DllMain(HINSTANCE /*inst*/, DWORD /*reason*/, LPVOID /*reserved*/) {
+    return TRUE;
+}
+
 PLUG_EXPORT bool pluginit(PLUG_INITSTRUCT* init_struct) {
     init_struct->sdkVersion = PLUG_SDKVERSION;
     init_struct->pluginVersion = PLUGIN_VERSION;
