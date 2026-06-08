@@ -56,15 +56,20 @@ typedef struct _BRIDGE_CONFIG
 /// <returns>On error it returns a non-null error message.</returns>
 BRIDGE_IMPEXP const wchar_t* BridgeInit(BRIDGE_CONFIG* config);
 
-BRIDGE_IMPEXP HMODULE WINAPI BridgeLoadLibraryCheckedW(const wchar_t* szDll, bool allowFailure);
+BRIDGE_IMPEXP HMODULE BridgeLoadLibraryCheckedW(const wchar_t* szDll, bool allowFailure);
 
-BRIDGE_IMPEXP HMODULE WINAPI BridgeLoadLibraryCheckedA(const char* szDll, bool allowFailure);
+BRIDGE_IMPEXP HMODULE BridgeLoadLibraryCheckedA(const char* szDll, bool allowFailure);
 
 /// <summary>
 /// Start the bridge.
 /// </summary>
 /// <returns>On error it returns a non-null error message.</returns>
 BRIDGE_IMPEXP const wchar_t* BridgeStart();
+
+/// <summary>
+/// Returns true when running with the headless host.
+/// </summary>
+BRIDGE_IMPEXP bool BridgeIsHeadless();
 
 /// <summary>
 /// Allocate buffer. Use BridgeFree to free the buffer.
@@ -359,6 +364,7 @@ typedef enum
     DBG_XREF_ADD_MULTI,             // param1=const XREF_EDGE* edges,    param2=duint count
     DBG_TYPE_VISIT,                 // param1=TYPEVISITDATA* data,       param2=unused
     DBG_UPDATE_GUI,                 // param1=disasm_addr,               param2=bool stack
+    DBG_IS_TESTING,                 // param1=unused,                    param2=unused
 } DBGMSG;
 
 typedef enum
@@ -578,6 +584,8 @@ typedef MEMORY_SIZE VALUE_SIZE;
 
 typedef struct DBGFUNCTIONS_ DBGFUNCTIONS;
 
+struct SYMBOLPTR_;  // Forward declaration
+
 // Callback declaration:
 // bool cbSymbolEnum(const SYMBOLPTR* symbol, void* user);
 // To get the data from the opaque pointer:
@@ -695,9 +703,8 @@ struct SYMBOLINFOCPP : SYMBOLINFO
     SYMBOLINFOCPP(const SYMBOLINFOCPP &) = delete;
     SYMBOLINFOCPP(SYMBOLINFOCPP &&) = delete;
 
-    SYMBOLINFOCPP()
+    SYMBOLINFOCPP() : SYMBOLINFO{}
     {
-        memset(this, 0, sizeof(SYMBOLINFO));
     }
 
     ~SYMBOLINFOCPP()
@@ -1148,7 +1155,9 @@ BRIDGE_IMPEXP bool DbgGetModuleAt(duint addr, char* text);
 BRIDGE_IMPEXP BPXTYPE DbgGetBpxTypeAt(duint addr);
 BRIDGE_IMPEXP duint DbgValFromString(const char* string);
 BRIDGE_IMPEXP bool DbgGetRegDumpEx(REGDUMP_AVX512* regdump, size_t size);
-BRIDGE_IMPEXP bool DbgValToString(const char* string, duint value);
+BRIDGE_IMPEXP bool DbgValSetBuffer(const char* string, const void* data, size_t size);
+// Previously called DbgValToString.
+BRIDGE_IMPEXP bool DbgValSetScalar(const char* string, duint value);
 BRIDGE_IMPEXP bool DbgMemIsValidReadPtr(duint addr);
 BRIDGE_IMPEXP int DbgGetBpList(BPXTYPE type, BPMAP* list);
 BRIDGE_IMPEXP FUNCTYPE DbgGetFunctionTypeAt(duint addr);
@@ -1174,6 +1183,7 @@ BRIDGE_IMPEXP void DbgDisasmAt(duint addr, DISASM_INSTR* instr);
 BRIDGE_IMPEXP bool DbgStackCommentGet(duint addr, STACK_COMMENT* comment);
 BRIDGE_IMPEXP void DbgGetThreadList(THREADLIST* list);
 BRIDGE_IMPEXP void DbgSettingsUpdated();
+BRIDGE_IMPEXP bool DbgIsTesting();
 BRIDGE_IMPEXP void DbgDisasmFastAt(duint addr, BASIC_INSTRUCTION_INFO* basicinfo);
 BRIDGE_IMPEXP void DbgMenuEntryClicked(int hEntry);
 BRIDGE_IMPEXP bool DbgFunctionGet(duint addr, duint* start, duint* end);
@@ -1410,6 +1420,7 @@ BRIDGE_IMPEXP bool DbgTypeVisit(const TYPEVISITDATA* data);
 
 // clang-format on
 
+// *INDENT-OFF*
 #define GUIMSG_ENUM(msg, param1, param2) msg,
 
 typedef enum
@@ -1418,6 +1429,7 @@ typedef enum
 } GUIMSG;
 
 #undef GUIMSG_ENUM
+// *INDENT-ON*
 
 //GUI Typedefs
 typedef void (*GUICALLBACK)();
@@ -1563,7 +1575,7 @@ BRIDGE_IMPEXP bool GuiIsUpdateDisabled();
 BRIDGE_IMPEXP void GuiUpdateEnable(bool updateNow);
 BRIDGE_IMPEXP void GuiUpdateDisable();
 BRIDGE_IMPEXP bool GuiLoadGraph(BridgeCFGraphList* graph, duint addr);
-BRIDGE_IMPEXP duint GuiGraphAt(duint addr);
+BRIDGE_IMPEXP duint GuiGraphAt(duint addr); // Navigate to addr in the cached graph, returns graph entry point or 0 if addr is not in the cached graph
 BRIDGE_IMPEXP void GuiUpdateGraphView();
 BRIDGE_IMPEXP void GuiDisableLog();
 BRIDGE_IMPEXP void GuiEnableLog();

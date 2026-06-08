@@ -1,10 +1,14 @@
 # Build outputs
+build/
 plugin/build/
 plugin/out/
 server/dist/
 server/node_modules/
 test/dist/
 test/node_modules/
+
+# SDK fetch marker (libs are pulled by plugin/fetch-sdk.ps1)
+plugin/sdk/.sdk-version
 
 # IDE
 .vs/

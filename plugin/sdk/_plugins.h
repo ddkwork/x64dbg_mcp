@@ -236,6 +236,16 @@ typedef struct
     GUIMENUTYPE hMenu;
 } PLUG_CB_MENUPREPARE;
 
+typedef struct
+{
+    const char* traceFilePath;
+} PLUG_CB_STARTTRACE;
+
+typedef struct
+{
+    void* reserved;
+} PLUG_CB_STOPTRACE;
+
 typedef enum
 {
     ValueTypeNumber,
@@ -295,6 +305,8 @@ typedef enum
     CB_VALTOSTRING, //PLUG_CB_VALTOSTRING
     CB_MENUPREPARE, //PLUG_CB_MENUPREPARE
     CB_STOPPINGDEBUG, //PLUG_CB_STOPDEBUG
+    CB_STARTTRACE, //PLUG_CB_STARTTRACE
+    CB_STOPTRACE, //PLUG_CB_STOPTRACE
     CB_LAST
 } CBTYPE;
 
@@ -355,6 +367,7 @@ PLUG_IMPEXP bool _plugin_load(const char* pluginName);
 PLUG_IMPEXP duint _plugin_hash(const void* data, duint size);
 PLUG_IMPEXP bool _plugin_registerformatfunction(int pluginHandle, const char* type, CBPLUGINFORMATFUNCTION cbFunction, void* userdata);
 PLUG_IMPEXP bool _plugin_unregisterformatfunction(int pluginHandle, const char* type);
+PLUG_IMPEXP bool _plugin_testassert(bool condition, const char* format, ...);
 
 #ifdef __cplusplus
 }

@@ -423,7 +423,7 @@ x64dbg_mcp/
 │           └── format_utils.*      # Address formatting, hex parsing
 │
 ├── server/                         # TypeScript MCP server (npm package)
-│   ├── package.json                # x64dbg-mcp-server v2.2.1
+│   ├── package.json                # x64dbg-mcp-server v2.2.2
 │   ├── tsconfig.json               # ES2022, Node16, strict mode
 │   ├── server.json                 # MCP registry manifest
 │   └── src/
@@ -480,23 +480,33 @@ x64dbg_mcp/
 
 Requires CMake >= 3.20, Ninja, vcpkg, and Clang-cl (ships with Visual Studio 2022 C++ workload).
 
-```powershell
-cd plugin
+The x64dbg plugin SDK import libs (`x64bridge.lib`, `x64dbg.lib`, ...) are release artifacts
+that don't live in any source tree, so they're fetched from the official x64dbg release rather
+than committed. `build.ps1` handles this for you.
 
+```powershell
 # Set VCPKG_ROOT to your vcpkg installation
 $env:VCPKG_ROOT = "C:\path\to\vcpkg"
 
-# Configure
-cmake --preset x64-release    # For 64-bit plugin
-cmake --preset x32-release    # For 32-bit plugin
-
-# Build
-cmake --build build/x64-release
-cmake --build build/x32-release
+# One-shot: fetches the SDK if needed, builds both plugins (+ -Server for the TS server)
+.\build.ps1                 # both x64 + x32
+.\build.ps1 -Arch x64       # x64 only
+.\build.ps1 -Server         # also build the TypeScript server
+.\build.ps1 -Install        # build, then copy into your x64dbg (edit install.ps1 path)
 
 # Output:
-#   build/x64-release/bin/x64dbg_mcp.dp64
-#   build/x32-release/bin/x64dbg_mcp.dp32
+#   plugin/build/x64-release/bin/x64dbg_mcp.dp64
+#   plugin/build/x32-release/bin/x64dbg_mcp.dp32
+```
+
+`fetch-sdk.ps1` pulls the latest x64dbg pluginsdk only when the local copy is behind, and
+falls back to the cached SDK when offline. To build manually instead:
+
+```powershell
+.\plugin\fetch-sdk.ps1        # sync SDK headers + libs
+cd plugin
+cmake --preset x64-release
+cmake --build --preset x64-release
 ```
 
 Copy the `.dp64` / `.dp32` files to your x64dbg `plugins/` directory and restart x64dbg.
