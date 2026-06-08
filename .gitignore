@@ -10,6 +10,9 @@ test/node_modules/
 # SDK fetch marker (libs are pulled by plugin/fetch-sdk.ps1)
 plugin/sdk/.sdk-version
 
+# install.ps1 remembered x64dbg path (local)
+.x64dbg-path
+
 # IDE
 .vs/
 .vscode/

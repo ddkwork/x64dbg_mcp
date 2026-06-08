@@ -4,6 +4,23 @@ Everything below is ready to copy-paste. Work through the list.
 
 ---
 
+## v2.2.2 relaunch angle (lead with this)
+
+The fresh hook for any new post/thread: **it works again on current x64dbg, and it stopped
+timing out.** Two concrete, relatable fixes:
+
+- **x32dbg loads again.** Newer x64dbg snapshots changed the loader to require an explicit
+  `DllMain`; the 32-bit plugin would fail with `_DllMain@12 could not be located`. Fixed in
+  v2.2.2 - 32-bit reversing is back.
+- **No more spurious timeouts.** `run`, `continue`, and conditional traces are unbounded, so
+  the server now waits indefinitely by default instead of killing long operations mid-flight.
+
+Suggested one-liner to prepend to launch posts:
+> "Just shipped v2.2.2 - fixed 32-bit support for the latest x64dbg update and killed the
+> request timeouts. 23 mega-tools, AI-driven debugging, all local."
+
+---
+
 ## 1. MCP Official Registry (HIGH PRIORITY)
 
 **URL**: https://registry.modelcontextprotocol.io
@@ -22,7 +39,7 @@ They have a CLI publisher tool. Follow the guide at the registry site under "Add
 Open a PR adding this line under a "Debugging / Reverse Engineering" category (or wherever it fits):
 
 ```markdown
-- **[x64dbg MCP Server](https://github.com/bromoket/x64dbg_mcp)** - 152-tool MCP server for the x64dbg debugger. Full control over debugging, disassembly, breakpoints, tracing, memory analysis, and anti-debug bypass. C++ plugin + TypeScript server. `npx x64dbg-mcp-server`
+- **[x64dbg MCP Server](https://github.com/bromoket/x64dbg_mcp)** - 23-mega-tool MCP server for the x64dbg debugger. Full control over debugging, disassembly, breakpoints, tracing, memory analysis, and anti-debug bypass. C++ plugin + TypeScript server. `npx x64dbg-mcp-server`
 ```
 
 ### Option C: appcypher/awesome-mcp-servers
@@ -39,7 +56,7 @@ The wiki is editable. Add an entry:
 
 ```markdown
 ### [x64dbg MCP Server](https://github.com/bromoket/x64dbg_mcp)
-AI-powered debugging through the Model Context Protocol. 152 tools give LLMs (Claude, Cursor, etc.) full control over x64dbg - breakpoints, memory, disassembly, tracing, anti-debug, and more. C++ plugin + TypeScript MCP server on npm.
+AI-powered debugging through the Model Context Protocol. 23 mega-tools give LLMs (Claude, Cursor, etc.) full control over x64dbg - breakpoints, memory, disassembly, tracing, anti-debug, and more. C++ plugin + TypeScript MCP server on npm.
 ```
 
 ---
@@ -50,7 +67,7 @@ AI-powered debugging through the Model Context Protocol. 152 tools give LLMs (Cl
 Open a PR. Add under x64dbg section:
 
 ```markdown
-- [x64dbg MCP Server](https://github.com/bromoket/x64dbg_mcp) - MCP server giving AI assistants (Claude, Cursor, Windsurf) full control over x64dbg. 152 tools for debugging, disassembly, tracing, memory analysis, anti-debug bypass.
+- [x64dbg MCP Server](https://github.com/bromoket/x64dbg_mcp) - MCP server giving AI assistants (Claude, Cursor, Windsurf) full control over x64dbg. 23 mega-tools for debugging, disassembly, tracing, memory analysis, anti-debug bypass.
 ```
 
 ---
@@ -59,13 +76,13 @@ Open a PR. Add under x64dbg section:
 
 ### r/ReverseEngineering
 
-**Title**: I built an MCP server that lets AI control x64dbg - 152 tools for AI-powered reverse engineering
+**Title**: I built an MCP server that lets AI control x64dbg - 23 mega-tools for AI-powered reverse engineering
 
 **Body**:
 ```
 I've been working on an MCP (Model Context Protocol) server for x64dbg that gives AI assistants like Claude, Cursor, and Windsurf full control over the debugger.
 
-**What it does**: 152 tools across 21 categories - breakpoints, memory read/write, disassembly, tracing, anti-debug bypass, control flow graphs, IAT dumping, pattern scanning, and more. You talk to the AI in natural language and it operates x64dbg for you.
+**What it does**: 23 mega-tools across 21 categories - breakpoints, memory read/write, disassembly, tracing, anti-debug bypass, control flow graphs, IAT dumping, pattern scanning, and more. You talk to the AI in natural language and it operates x64dbg for you.
 
 **How it works**: A C++ plugin runs inside x64dbg as a REST API on localhost. A TypeScript MCP server bridges that to any MCP-compatible AI client over stdio. All local, nothing leaves your machine.
 
@@ -85,11 +102,11 @@ Open source, MIT licensed. Feedback welcome.
 
 ### r/ClaudeAI
 
-**Title**: Built a 152-tool MCP server for x64dbg - AI-powered binary debugging and reverse engineering
+**Title**: Built a 23-mega-tool MCP server for x64dbg - AI-powered binary debugging and reverse engineering
 
 **Body**:
 ```
-Made an MCP server that connects Claude (Code or Desktop) to the x64dbg debugger. 152 fully-typed tools let Claude set breakpoints, read memory, disassemble functions, trace execution, bypass anti-debug, dump modules, and more.
+Made an MCP server that connects Claude (Code or Desktop) to the x64dbg debugger. 23 fully-typed mega-tools let Claude set breakpoints, read memory, disassemble functions, trace execution, bypass anti-debug, dump modules, and more.
 
 Setup is just:
 1. Copy plugin DLL to x64dbg
@@ -113,13 +130,13 @@ npm: https://www.npmjs.com/package/x64dbg-mcp-server
 
 ### r/Malware
 
-**Title**: MCP server for x64dbg - let AI assist your malware analysis (152 debugging tools)
+**Title**: MCP server for x64dbg - let AI assist your malware analysis (23 mega-tools)
 
 **Body**:
 ```
 Built an MCP server that bridges AI assistants to x64dbg. Useful for malware analysis workflows where you want AI to help navigate through packed/obfuscated code.
 
-152 tools including:
+23 mega-tools including:
 - Anti-debug: hide debugger, read/modify PEB, DEP status
 - Tracing: conditional trace with logging, hit counting
 - Memory: AOB pattern scan (returns all matches), read/write with verify
@@ -137,13 +154,13 @@ MIT licensed.
 
 ### r/cursor
 
-**Title**: x64dbg MCP server - 152 debugging/RE tools for Cursor
+**Title**: x64dbg MCP server - 23 mega-tools for Cursor
 
 **Body**:
 ```
 If anyone here does reverse engineering or binary debugging, I built an MCP server that connects Cursor to the x64dbg debugger.
 
-152 tools: breakpoints, memory, disassembly, tracing, anti-debug, pattern scanning, control flow graphs, etc.
+23 mega-tools: breakpoints, memory, disassembly, tracing, anti-debug, pattern scanning, control flow graphs, etc.
 
 Add to .cursor/mcp.json:
 {
@@ -164,7 +181,7 @@ GitHub: https://github.com/bromoket/x64dbg_mcp
 
 ## 6. Hacker News - Show HN
 
-**Title**: Show HN: 152-tool MCP server that lets AI control the x64dbg debugger
+**Title**: Show HN: 23-mega-tool MCP server that lets AI control the x64dbg debugger
 
 **URL**: https://github.com/bromoket/x64dbg_mcp
 
@@ -176,7 +193,7 @@ It's two components:
 - A C++ plugin that runs inside x64dbg as a REST API on localhost
 - A TypeScript MCP server on npm that bridges to any MCP client (Claude, Cursor, Windsurf, etc.)
 
-152 tools covering: debug control, registers, memory, disassembly, breakpoints (including batch configure), symbols, stack, threads, modules, search (AOB pattern scan), command execution, analysis (xrefs, CFG), tracing, dumping (with Scylla IAT fix), anti-debug bypass, exceptions, process inspection, handles, control flow, and patching.
+23 mega-tools covering: debug control, registers, memory, disassembly, breakpoints (including batch configure), symbols, stack, threads, modules, search (AOB pattern scan), command execution, analysis (xrefs, CFG), tracing, dumping (with Scylla IAT fix), anti-debug bypass, exceptions, process inspection, handles, control flow, and patching.
 
 Everything is local - the plugin binds to 127.0.0.1 only, the MCP server uses stdio. No data leaves your machine.
 
@@ -193,7 +210,7 @@ Install: copy plugin DLL + add one JSON config block pointing at `npx x64dbg-mcp
 ```
 I built an MCP server that gives AI full control over the x64dbg debugger.
 
-152 tools: breakpoints, memory, disassembly, tracing, anti-debug bypass, CFG, pattern scanning, IAT dumping...
+23 mega-tools: breakpoints, memory, disassembly, tracing, anti-debug bypass, CFG, pattern scanning, IAT dumping...
 
 Works with Claude, Cursor, Windsurf, Cline.
 
@@ -215,7 +232,7 @@ How I reversed an anti-cheat using AI + x64dbg:
 
 All through natural language. No manual scripting.
 
-This is what 152 MCP tools looks like in practice.
+This is what 23 mega-tools looks like in practice.
 github.com/bromoket/x64dbg_mcp
 ```
 
@@ -232,7 +249,7 @@ Record a 2-3 minute demo showing:
 4. Claude: "Search for the string 'license' in the main module"
 5. Claude: "Disassemble that function and explain it"
 
-Title: "AI-Powered Reverse Engineering with Claude + x64dbg (152 MCP Tools)"
+Title: "AI-Powered Reverse Engineering with Claude + x64dbg (23 mega-tools)"
 
 Upload to YouTube, embed in README.
 
