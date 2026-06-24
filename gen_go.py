@@ -902,6 +902,13 @@ def write_file(path: Path, content: str):
     with open(path, 'w', encoding='utf-8') as f:
         f.write(content)
 
+def parse_single_field_struct(s: str):
+    """Parse 'struct{Field Type `json:\"key\"`}' into (fieldName, fieldType, jsonKey) or None."""
+    m = re.match(r'^struct\{(\w+)\s+([^`]+?)\s*`json:"(\w+)"`\}$', s)
+    if m:
+        return m.group(1), m.group(2).strip(), m.group(3)
+    return None
+
 def gen_action(cat: str, action: str, method: str, endpoint: str,
                body_type: str, has_body: bool, get_params: list[str]):
     func_name = pascal(action)
@@ -911,8 +918,13 @@ def gen_action(cat: str, action: str, method: str, endpoint: str,
     lines.append(f"// {func_name} calls {method} {endpoint}")
 
     func_params = []
+    single_field = None
     if has_body and body_type:
-        func_params.append(f"req {body_type}")
+        single_field = parse_single_field_struct(body_type)
+        if single_field:
+            func_params.append(f"{single_field[0]} {single_field[1]}")
+        else:
+            func_params.append(f"req {body_type}")
     if get_params:
         for p in get_params:
             func_params.append(f"{p} string")
@@ -930,7 +942,9 @@ def gen_action(cat: str, action: str, method: str, endpoint: str,
         else:
             lines.append(f"    return doGET[{resp_type}](c, \"{endpoint}\", nil)")
     elif method == "POST":
-        if body_type:
+        if single_field:
+            lines.append(f'    return doPOST[{resp_type}](c, "{endpoint}", map[string]any{{"{single_field[2]}": {single_field[0]}}})')
+        elif body_type:
             lines.append(f"    return doPOST[{resp_type}](c, \"{endpoint}\", req)")
         else:
             lines.append(f"    return doPOST[{resp_type}](c, \"{endpoint}\", nil)")

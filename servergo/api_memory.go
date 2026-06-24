@@ -38,13 +38,13 @@ func (c *Client) IsCode(address string) (MemoryValid, error) {
 }
 
 // Allocate calls POST /api/memory/allocate
-func (c *Client) Allocate(req struct{Size string `json:"size"`}) (MemoryAlloc, error) {
-    return doPOST[MemoryAlloc](c, "/api/memory/allocate", req)
+func (c *Client) Allocate(Size string) (MemoryAlloc, error) {
+    return doPOST[MemoryAlloc](c, "/api/memory/allocate", map[string]any{"size": Size})
 }
 
 // Free calls POST /api/memory/free
-func (c *Client) Free(req struct{Address string `json:"address"`}) (StatusMsg, error) {
-    return doPOST[StatusMsg](c, "/api/memory/free", req)
+func (c *Client) Free(Address string) (StatusMsg, error) {
+    return doPOST[StatusMsg](c, "/api/memory/free", map[string]any{"address": Address})
 }
 
 // Protect calls POST /api/memory/protect

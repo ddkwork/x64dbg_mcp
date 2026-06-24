@@ -9,8 +9,8 @@ func (c *Client) SetExc(req struct{Code string `json:"code"`; Chance string `jso
 }
 
 // DelExc calls POST /api/exceptions/delete_bp
-func (c *Client) DelExc(req struct{Code string `json:"code"`}) (StatusMsg, error) {
-    return doPOST[StatusMsg](c, "/api/exceptions/delete_bp", req)
+func (c *Client) DelExc(Code string) (StatusMsg, error) {
+    return doPOST[StatusMsg](c, "/api/exceptions/delete_bp", map[string]any{"code": Code})
 }
 
 // ListExc calls GET /api/exceptions/list_bps

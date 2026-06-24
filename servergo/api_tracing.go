@@ -14,8 +14,8 @@ func (c *Client) TraceOver(req TraceOverReq) (map[string]string, error) {
 }
 
 // TraceRun calls POST /api/trace/run
-func (c *Client) TraceRun(req struct{Party string `json:"party"`}) (StatusMsg, error) {
-    return doPOST[StatusMsg](c, "/api/trace/run", req)
+func (c *Client) TraceRun(Party string) (StatusMsg, error) {
+    return doPOST[StatusMsg](c, "/api/trace/run", map[string]any{"party": Party})
 }
 
 // TraceStop calls POST /api/trace/stop
@@ -29,8 +29,8 @@ func (c *Client) TraceStatus() (TraceStatus, error) {
 }
 
 // Animate calls POST /api/trace/animate
-func (c *Client) Animate(req struct{Command string `json:"command"`}) (map[string]string, error) {
-    return doPOST[map[string]string](c, "/api/trace/animate", req)
+func (c *Client) Animate(Command string) (map[string]string, error) {
+    return doPOST[map[string]string](c, "/api/trace/animate", map[string]any{"command": Command})
 }
 
 // ConditionalRun calls POST /api/trace/conditional_run

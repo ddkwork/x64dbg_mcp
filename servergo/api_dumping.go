@@ -51,6 +51,6 @@ func (c *Client) DumpModule(req struct{Module string `json:"module"`; File strin
 }
 
 // FixIat calls POST /api/dump/fix_iat
-func (c *Client) FixIat(req struct{OEP string `json:"oep"`}) (map[string]string, error) {
-    return doPOST[map[string]string](c, "/api/dump/fix_iat", req)
+func (c *Client) FixIat(OEP string) (map[string]string, error) {
+    return doPOST[map[string]string](c, "/api/dump/fix_iat", map[string]any{"oep": OEP})
 }

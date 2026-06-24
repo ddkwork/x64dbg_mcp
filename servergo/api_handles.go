@@ -31,6 +31,6 @@ func (c *Client) GetName(handle string) (map[string]string, error) {
 }
 
 // CloseHandle calls POST /api/handles/close
-func (c *Client) CloseHandle(req struct{Handle string `json:"handle"`}) (StatusMsg, error) {
-    return doPOST[StatusMsg](c, "/api/handles/close", req)
+func (c *Client) CloseHandle(Handle string) (StatusMsg, error) {
+    return doPOST[StatusMsg](c, "/api/handles/close", map[string]any{"handle": Handle})
 }

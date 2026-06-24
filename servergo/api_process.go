@@ -29,6 +29,6 @@ func (c *Client) Dbversion() (map[string]string, error) {
 }
 
 // SetCmdline calls POST /api/process/set_cmdline
-func (c *Client) SetCmdline(req struct{Cmdline string `json:"cmdline"`}) (StatusMsg, error) {
-    return doPOST[StatusMsg](c, "/api/process/set_cmdline", req)
+func (c *Client) SetCmdline(Cmdline string) (StatusMsg, error) {
+    return doPOST[StatusMsg](c, "/api/process/set_cmdline", map[string]any{"cmdline": Cmdline})
 }

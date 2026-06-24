@@ -212,9 +212,7 @@ func TestSymbolResolve(t *testing.T) {
 // ─── Command ────────────────────────────────────────────────────────────
 
 func TestCommandEval(t *testing.T) {
-	data, err := client.Evaluate(struct {
-		Expression string `json:"expression"`
-	}{Expression: "cip"})
+	data, err := client.Evaluate("cip")
 	if err != nil {
 		t.Fatalf("Evaluate() failed: %v", err)
 	}

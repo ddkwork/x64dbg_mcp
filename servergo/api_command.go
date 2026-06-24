@@ -4,28 +4,28 @@ package servergo
 // ─── Command API ────────────────────────────────────────
 
 // Execute calls POST /api/command/exec
-func (c *Client) Execute(req struct{Command string `json:"command"`}) (CommandResult, error) {
-    return doPOST[CommandResult](c, "/api/command/exec", req)
+func (c *Client) Execute(Command string) (CommandResult, error) {
+    return doPOST[CommandResult](c, "/api/command/exec", map[string]any{"command": Command})
 }
 
 // Script calls POST /api/command/script
-func (c *Client) Script(req struct{Commands []string `json:"commands"`}) (CommandResult, error) {
-    return doPOST[CommandResult](c, "/api/command/script", req)
+func (c *Client) Script(Commands []string) (CommandResult, error) {
+    return doPOST[CommandResult](c, "/api/command/script", map[string]any{"commands": Commands})
 }
 
 // Evaluate calls POST /api/command/eval
-func (c *Client) Evaluate(req struct{Expression string `json:"expression"`}) (EvalResult, error) {
-    return doPOST[EvalResult](c, "/api/command/eval", req)
+func (c *Client) Evaluate(Expression string) (EvalResult, error) {
+    return doPOST[EvalResult](c, "/api/command/eval", map[string]any{"expression": Expression})
 }
 
 // Format calls POST /api/command/format
-func (c *Client) Format(req struct{Format string `json:"format"`}) (FormatResult, error) {
-    return doPOST[FormatResult](c, "/api/command/format", req)
+func (c *Client) Format(Format string) (FormatResult, error) {
+    return doPOST[FormatResult](c, "/api/command/format", map[string]any{"format": Format})
 }
 
 // SetInitScript calls POST /api/command/init_script
-func (c *Client) SetInitScript(req struct{File string `json:"file"`}) (StatusMsg, error) {
-    return doPOST[StatusMsg](c, "/api/command/init_script", req)
+func (c *Client) SetInitScript(File string) (StatusMsg, error) {
+    return doPOST[StatusMsg](c, "/api/command/init_script", map[string]any{"file": File})
 }
 
 // GetInitScript calls GET /api/command/init_script

@@ -14,8 +14,8 @@ func (c *Client) Apply(req struct{Address string `json:"address"`; Bytes string 
 }
 
 // Restore calls POST /api/patches/restore
-func (c *Client) Restore(req struct{Address string `json:"address"`}) (StatusMsg, error) {
-    return doPOST[StatusMsg](c, "/api/patches/restore", req)
+func (c *Client) Restore(Address string) (StatusMsg, error) {
+    return doPOST[StatusMsg](c, "/api/patches/restore", map[string]any{"address": Address})
 }
 
 // ExportPatch calls POST /api/patches/export

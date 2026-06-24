@@ -49,6 +49,6 @@ func (c *Client) RestartDebug() (StatusMsg, error) {
 }
 
 // RunToAddress calls POST /api/debug/run_to
-func (c *Client) RunToAddress(req struct{Address string `json:"address"`}) (StatusMsg, error) {
-    return doPOST[StatusMsg](c, "/api/debug/run_to", req)
+func (c *Client) RunToAddress(Address string) (StatusMsg, error) {
+    return doPOST[StatusMsg](c, "/api/debug/run_to", map[string]any{"address": Address})
 }

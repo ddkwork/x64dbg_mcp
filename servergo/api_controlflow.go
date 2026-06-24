@@ -44,6 +44,6 @@ func (c *Client) AddFunction(req struct{Start string `json:"start"`; End string 
 }
 
 // DeleteFunction calls POST /api/cfg/delete_function
-func (c *Client) DeleteFunction(req struct{Address string `json:"address"`}) (StatusMsg, error) {
-    return doPOST[StatusMsg](c, "/api/cfg/delete_function", req)
+func (c *Client) DeleteFunction(Address string) (StatusMsg, error) {
+    return doPOST[StatusMsg](c, "/api/cfg/delete_function", map[string]any{"address": Address})
 }
