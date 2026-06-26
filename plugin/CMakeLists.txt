@@ -5,6 +5,7 @@ project(x64dbg_mcp LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_UNITY_BUILD_BATCH_SIZE 64)
 
 # nlohmann_json (header-only, bundled)
 add_library(nlohmann_json INTERFACE)
@@ -23,6 +24,7 @@ um_dp64(x64dbg_mcp
     DEFINES _CRT_SECURE_NO_WARNINGS NOMINMAX WIN32_LEAN_AND_MEAN BUILD_PLUGIN
     EXTRA_SOURCES src/plugin.def
 )
+set_target_properties(x64dbg_mcp PROPERTIES UNITY_BUILD ON)
 
 # ============================================================
 # x64dbg_mcp - x32dbg Plugin (x86)
