@@ -9,7 +9,7 @@
 static constexpr WORD IDC_TITLE_LABEL   = 200;
 static constexpr WORD IDC_VER_LABEL     = 201;
 static constexpr WORD IDC_STATUS_LABEL  = 202;
-static constexpr WORD IDC_SEPARATOR     = 203;
+static constexpr WORD IDC_ABOUT_SEPARATOR = 203;
 static constexpr WORD IDC_URL_LABEL     = 204;
 static constexpr WORD IDC_DISCORD_LABEL = 205;
 static constexpr WORD IDC_OK_BTN        = IDOK;
@@ -18,18 +18,21 @@ static constexpr WORD IDC_OK_BTN        = IDOK;
 // In-memory dialog template builder
 // ============================================================================
 
-static LPWORD align_dword(LPWORD ptr) {
+// Unity build: dialog template helpers renamed to avoid conflicts with settings_dialog.cpp
+// (they'd collide in the same translation unit despite 'static')
+
+static LPWORD dlg_align_dword(LPWORD ptr) {
     auto addr = reinterpret_cast<uintptr_t>(ptr);
     addr = (addr + 3) & ~static_cast<uintptr_t>(3);
     return reinterpret_cast<LPWORD>(addr);
 }
 
-static LPWORD write_wide_string(LPWORD ptr, const char* str) {
+static LPWORD dlg_write_wide_string(LPWORD ptr, const char* str) {
     int len = MultiByteToWideChar(CP_ACP, 0, str, -1, reinterpret_cast<LPWSTR>(ptr), 256);
     return ptr + len;
 }
 
-static LPWORD add_dialog_item(
+static LPWORD dlg_add_dialog_item(
     LPWORD ptr,
     DWORD style,
     short x, short y, short cx, short cy,
@@ -37,7 +40,7 @@ static LPWORD add_dialog_item(
     WORD class_atom,
     const char* text
 ) {
-    ptr = align_dword(ptr);
+    ptr = dlg_align_dword(ptr);
 
     auto* item = reinterpret_cast<DLGITEMTEMPLATE*>(ptr);
     item->style = style | WS_CHILD | WS_VISIBLE;
@@ -53,7 +56,7 @@ static LPWORD add_dialog_item(
     *ptr++ = 0xFFFF;
     *ptr++ = class_atom;
 
-    ptr = write_wide_string(ptr, text);
+    ptr = dlg_write_wide_string(ptr, text);
 
     // Creation data (none)
     *ptr++ = 0;
@@ -92,46 +95,46 @@ static LPDLGTEMPLATE build_about_template() {
     // Class (default)
     *ptr++ = 0;
     // Title
-    ptr = write_wide_string(ptr, "About");
+    ptr = dlg_write_wide_string(ptr, "About");
 
     // Font (DS_SETFONT): point size + face name
     *ptr++ = 9;
-    ptr = write_wide_string(ptr, "Segoe UI");
+    ptr = dlg_write_wide_string(ptr, "Segoe UI");
 
     // --- Controls ---
 
     // Title (centered, bolded in WM_INITDIALOG)
-    ptr = add_dialog_item(ptr,
+    ptr = dlg_add_dialog_item(ptr,
         SS_CENTER, 7, 8, 146, 10,
         IDC_TITLE_LABEL, 0x0082, PLUGIN_NAME);
 
     // Version (centered)
-    ptr = add_dialog_item(ptr,
+    ptr = dlg_add_dialog_item(ptr,
         SS_CENTER, 7, 21, 146, 8,
         IDC_VER_LABEL, 0x0082, "");
 
     // Status (centered)
-    ptr = add_dialog_item(ptr,
+    ptr = dlg_add_dialog_item(ptr,
         SS_CENTER, 7, 33, 146, 8,
         IDC_STATUS_LABEL, 0x0082, "");
 
     // Etched separator
-    ptr = add_dialog_item(ptr,
+    ptr = dlg_add_dialog_item(ptr,
         SS_ETCHEDHORZ, 7, 47, 146, 1,
-        IDC_SEPARATOR, 0x0082, "");
+        IDC_ABOUT_SEPARATOR, 0x0082, "");
 
     // GitHub URL (centered, clickable — SS_NOTIFY enables STN_CLICKED)
-    ptr = add_dialog_item(ptr,
+    ptr = dlg_add_dialog_item(ptr,
         SS_CENTER | SS_NOTIFY, 7, 53, 146, 8,
         IDC_URL_LABEL, 0x0082, "github.com/bromoket/x64dbg_mcp");
 
     // Discord (centered, grey)
-    ptr = add_dialog_item(ptr,
+    ptr = dlg_add_dialog_item(ptr,
         SS_CENTER, 7, 65, 146, 8,
         IDC_DISCORD_LABEL, 0x0082, "");
 
     // OK button (centered)
-    ptr = add_dialog_item(ptr,
+    ptr = dlg_add_dialog_item(ptr,
         BS_DEFPUSHBUTTON | WS_TABSTOP, 55, 80, 50, 14,
         IDC_OK_BTN, 0x0080, "OK");
 

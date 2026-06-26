@@ -14,6 +14,7 @@ vendor
 *.apk
 *.json
 todo/
+servergo/asm/
 clone/
 build_debug/
 build/

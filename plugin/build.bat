@@ -1,2 +1,2 @@
-@REM cmake -B build -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON . && cmake --build build --config Release
-(cmake -B Debug -G "Ninja" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=Debug .   && cmake --build Debug --config Debug ) 1>build.log 2>&1 
+(cmake -B Release -G "Ninja" -DCMAKE_BUILD_TYPE=Release . && cmake --build Release --config Release) 2>&1 | powershell -NoProfile -Command "$input | Tee-Object -FilePath build.Release.log"
+(cmake -B Debug -G "Ninja" -DCMAKE_BUILD_TYPE=Debug . && cmake --build Debug --config Debug) 2>&1 | powershell -NoProfile -Command "$input | Tee-Object -FilePath build.Debug.log"
